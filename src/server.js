@@ -1,9 +1,12 @@
 const express = require("express")
 const server = express()
-server.get('/', (request, response) => {
+const routes = require("./routes")
 
-    return response.sendFile(__dirname + "/views/index.html")
+server.use(express.static("public"))
 
-})
+//routes
+server.use(routes)
+
+
 server.listen(3000, ()=> console.log('rodando'))
 
