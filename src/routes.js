@@ -1,4 +1,5 @@
 const express = require('express');
+const req = require('express/lib/request');
 const routes = express.Router()
 
 const views = __dirname + "/views/"
@@ -16,12 +17,48 @@ const profile = {
 
 }
 
+const jobs = [
+    {
+        id: 1,
+        name: "Pizzaria Guloso",
+        "daily-hours": 2,
+        "total-hours": 60,
+        created_at: Date.now()
+    },
+    {
+        id: 2,
+        name: "Pizzaria Guloso",
+        "daily-hours": 3,
+        "total-hours": 47,
+        created_at: Date.now() 
+    }
+]
 
 
-routes.get('/', (require, res) => res.render(views + "index"))
-routes.get('/job', (require, res) => res.render(views + "job"))
-routes.get('/job/edit', (require, res) => res.render(views + "job-edit"))
-routes.get('/profile', (require, res) => res.render(views + "profile", { profile }))
+routes.get('/', (req, res) => res.render(views + "index", {jobs}))
+routes.get('/job', (req, res) => res.render(views + "job"))
+routes.post('/job', (req, res) => {
+
+    const lastId = jobs[jobs.length - 1]?.id || 1;
+
+    //const job = req.body
+    //job.created_at = Date.now()
+    
+    jobs.push({
+        id: lastId + 1,
+        name: req.body.name,
+        "daily-hours": req.body["daily-hours"],
+        "total-hours": req.body["total-hours"],
+        created_at: Date.now()
+
+    })
+
+
+    return res.redirect('/')
+
+})
+routes.get('/job/edit', (req, res) => res.render(views + "job-edit"))
+routes.get('/profile', (req, res) => res.render(views + "profile", { profile }))
 
 
 
